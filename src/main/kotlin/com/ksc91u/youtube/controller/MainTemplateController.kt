@@ -25,6 +25,7 @@ class MainTemplateController{
 
         model.addAttribute("title", "$userId 在 Wave 抽到了 $name")
         model.addAttribute("character", pic)
+        model.addAttribute("userAgent", userAgentInfo)
         model.addAttribute("fb", userAgentInfo.contains("facebook").not())
 
         return "wave"
