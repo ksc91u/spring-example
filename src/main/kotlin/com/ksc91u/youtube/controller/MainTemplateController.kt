@@ -2,17 +2,16 @@ package com.ksc91u.youtube.controller
 
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @Controller
 class MainTemplateController{
-    @GetMapping("/index")
+    @RequestMapping(value=arrayOf("/index/{name}/{char}"), method= arrayOf(RequestMethod.GET))
     fun index(model: Model,
-              request: HttpServletRequest,
-              @RequestParam("i", required = false, defaultValue = "Wave 壞壞小妖精") userId: String,
-              @RequestParam("c", required = false, defaultValue = "0") char: String): String {
+              @PathVariable("name") userId: String,
+              @PathVariable("char") char: String,
+              request: HttpServletRequest): String {
 
         val userAgentInfo = request.getHeader("User-Agent");
         val names = arrayListOf<String>("智商 180", "韓國瑜珈老師", "台灣天才IT大臣")
