@@ -16,7 +16,6 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
     @RequestMapping(value = ["/list"], method = [RequestMethod.GET])
     fun listMappings(model: Model): String {
         val results = dao.findAll()
-        println(">>>> $results")
         model.addAttribute("mappings", results)
         return "list"
     }
@@ -40,9 +39,12 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
         val shareLinkDto = dao.getMapping(hashId)
 
         model.addAttribute("title", shareLinkDto.title)
-        model.addAttribute("character", shareLinkDto.hashKey)
+        model.addAttribute("content", shareLinkDto.content)
+        model.addAttribute("imgUrl", shareLinkDto.imgUrl)
+        model.addAttribute("routeUrl", shareLinkDto.routeUrl)
+
         model.addAttribute("userAgent", userAgentInfo)
-        model.addAttribute("fb", userAgentInfo.contains("facebook").not())
+        model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
 
         return "wave"
     }

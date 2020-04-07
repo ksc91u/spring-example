@@ -33,7 +33,11 @@ class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : 
         val params: Map<String, Any> = mapOf(
                 Pair("hashKey", hashId))
         val sql = "SELECT * FROM ShareLink WHERE hashKey = :hashKey"
-        return namedParameterJdbcTemplate.query<ShareLinkDto>(sql, params, ShareLinkMapper()).first()
+        val match = namedParameterJdbcTemplate.query<ShareLinkDto>(sql, params, ShareLinkMapper()).firstOrNull()
+                ?: ShareLinkDto(0, "-", "https://www.wave.com.tw",
+                        "Wave 聽你想聽的", "遇見好聲音 透過語音當 DJ", "https://assets-17app.akamaized.net/278ecb13-3762-4577-bff3-9f7bf5b527e6.png")
+
+        return match
     }
 
     override fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String) {
