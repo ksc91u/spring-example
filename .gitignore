@@ -1,5 +1,4 @@
-/mydb/
-derby.log
+/db/
 
 .gradle
 /build/

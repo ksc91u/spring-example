@@ -20,6 +20,7 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
         return "list"
     }
 
+    //curl -X POST --data "routeUrl=http://yahoo.com.tw&title=CCCCC&content=content&imgUrl=http://google.com"  http://localhost:8080/add
     @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
     fun addMapping(model: Model,
                    @RequestParam routeUrl: String,

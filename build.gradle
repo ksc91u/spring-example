@@ -59,8 +59,9 @@ dependencies {
 	implementation 'com.aventrix.jnanoid:jnanoid:2.0.0'
 
 	//derby
-	implementation("org.apache.derby:derby")
-	//implementation("org.apache.derby:derby:runtime")
+	//implementation("org.apache.derby:derby")
+	//hsql
+	implementation("org.hsqldb:hsqldb")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.2.4.RELEASE'
 
