@@ -20,6 +20,11 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
         return "list"
     }
 
+    @RequestMapping(value = ["/create"], method = [RequestMethod.GET])
+    fun create(model: Model): String {
+        return "create"
+    }
+
     //curl -X POST --data "routeUrl=http://yahoo.com.tw&title=CCCCC&content=content&imgUrl=http://google.com"  http://localhost:8080/add
     @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
     fun addMapping(model: Model,
@@ -27,7 +32,8 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
                    @RequestParam title: String,
                    @RequestParam content: String,
                    @RequestParam imgUrl: String): String {
-        dao.addMapping(routeUrl, title, content, imgUrl)
+        val hashKey = dao.addMapping(routeUrl, title, content, imgUrl)
+        model.addAttribute("key", hashKey)
         return "ok"
     }
 

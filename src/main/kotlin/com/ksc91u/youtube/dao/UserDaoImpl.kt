@@ -12,7 +12,7 @@ import java.util.*
 
 interface UserDao {
     fun findAll(): MutableList<ShareLinkDto>
-    fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String)
+    fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String): String
     fun getMapping(hashId: String): ShareLinkDto
 }
 
@@ -20,6 +20,7 @@ interface UserDao {
 class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : UserDao {
 
     private val random = SecureRandom()
+
     //private val chars = "123456789abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ".toCharArray()
     private val chars = "123456789abcdefghijkmnpqrstuvwxyz".toCharArray()
 
@@ -40,7 +41,7 @@ class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : 
         return match
     }
 
-    override fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String) {
+    override fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String): String {
         val sql = "INSERT INTO ShareLink(hashKey, routeUrl, title, content, imgUrl) " +
                 "VALUES (:hashKey, :routeUrl, :title, :content, :imgUrl)"
 
@@ -54,6 +55,8 @@ class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : 
         )
 
         namedParameterJdbcTemplate.execute(sql, params) { ps -> ps.execute() }
+
+        return nanoId
 
     }
 

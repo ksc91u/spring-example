@@ -62,6 +62,7 @@ dependencies {
 	//implementation("org.apache.derby:derby")
 	//hsql
 	implementation("org.hsqldb:hsqldb")
+	runtime("org.hsqldb:hsqldb")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.2.4.RELEASE'
 
