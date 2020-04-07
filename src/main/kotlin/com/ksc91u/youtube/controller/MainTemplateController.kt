@@ -31,6 +31,22 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
         return "ok"
     }
 
+    @RequestMapping(value = ["/share/{id}"], method = [RequestMethod.GET])
+    fun share(model: Model,
+              @PathVariable("id") hashId: String,
+              request: HttpServletRequest): String {
+
+        val userAgentInfo = request.getHeader("User-Agent");
+        val shareLinkDto = dao.getMapping(hashId)
+
+        model.addAttribute("title", shareLinkDto.title)
+        model.addAttribute("character", shareLinkDto.hashKey)
+        model.addAttribute("userAgent", userAgentInfo)
+        model.addAttribute("fb", userAgentInfo.contains("facebook").not())
+
+        return "wave"
+    }
+
 
     @RequestMapping(value = ["/index/{name}/{char}"], method = [RequestMethod.GET])
     fun index(model: Model,

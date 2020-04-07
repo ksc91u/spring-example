@@ -13,6 +13,7 @@ import java.util.*
 interface UserDao {
     fun findAll(): MutableList<ShareLinkDto>
     fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String)
+    fun getMapping(hashId: String): ShareLinkDto
 }
 
 @Repository
@@ -26,6 +27,13 @@ class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : 
         val params: Map<String, Any> = HashMap()
         val sql = "SELECT * FROM ShareLink ORDER BY id DESC"
         return namedParameterJdbcTemplate.query<ShareLinkDto>(sql, params, ShareLinkMapper())
+    }
+
+    override fun getMapping(hashId: String): ShareLinkDto {
+        val params: Map<String, Any> = mapOf(
+                Pair("hashKey", hashId))
+        val sql = "SELECT * FROM ShareLink WHERE hashKey = :hashKey"
+        return namedParameterJdbcTemplate.query<ShareLinkDto>(sql, params, ShareLinkMapper()).first()
     }
 
     override fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String) {
@@ -44,7 +52,6 @@ class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : 
         namedParameterJdbcTemplate.execute(sql, params) { ps -> ps.execute() }
 
     }
-
 
     private class ShareLinkMapper : RowMapper<ShareLinkDto> {
         @Throws(SQLException::class)
