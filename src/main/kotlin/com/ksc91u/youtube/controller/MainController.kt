@@ -1,6 +1,10 @@
 package com.ksc91u.youtube.controller
 
+import com.ksc91u.youtube.dao.UserDao
+import com.ksc91u.youtube.dao.UserDaoImpl
 import com.ksc91u.youtube.dto.Car
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
@@ -10,7 +14,9 @@ import javax.servlet.http.HttpServletResponse
 
 
 @RestController
-class MainRestController {
+class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
+    private val dao: UserDao = UserDaoImpl(namedParameterJdbcTemplate)
+
     @RequestMapping("/")
     fun index(): String {
         return "Greetings from Spring Boot!"

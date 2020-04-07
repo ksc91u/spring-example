@@ -1,7 +1,10 @@
 package com.ksc91u.youtube.controller
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import javax.sql.DataSource
 
 @Configuration
 class RfcConfig {
@@ -11,6 +14,15 @@ class RfcConfig {
         System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "|{}");
         return 0
     }
+
+    @Autowired
+    lateinit var dataSource: DataSource
+
+    @Bean
+    fun getNamedParameterJdbcTemplate() : NamedParameterJdbcTemplate {
+        return NamedParameterJdbcTemplate(dataSource)
+    }
+
 
 }
 //————————————————
