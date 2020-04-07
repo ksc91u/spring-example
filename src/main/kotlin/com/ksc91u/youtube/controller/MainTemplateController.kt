@@ -1,13 +1,38 @@
 package com.ksc91u.youtube.controller
 
+import com.ksc91u.youtube.dao.UserDao
+import com.ksc91u.youtube.dao.UserDaoImpl
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @Controller
-class MainTemplateController{
-    @RequestMapping(value=arrayOf("/index/{name}/{char}"), method= arrayOf(RequestMethod.GET))
+class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
+    private val dao: UserDao = UserDaoImpl(namedParameterJdbcTemplate)
+
+    @RequestMapping(value = ["/list"], method = [RequestMethod.GET])
+    fun listMappings(model: Model): String {
+        val results = dao.findAll()
+        println(">>>> $results")
+        model.addAttribute("mappings", results)
+        return "list"
+    }
+
+    @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
+    fun addMapping(model: Model,
+                   @RequestParam routeUrl: String,
+                   @RequestParam title: String,
+                   @RequestParam content: String,
+                   @RequestParam imgUrl: String): String {
+        dao.addMapping(routeUrl, title, content, imgUrl)
+        return "ok"
+    }
+
+
+    @RequestMapping(value = ["/index/{name}/{char}"], method = [RequestMethod.GET])
     fun index(model: Model,
               @PathVariable("name") userId: String,
               @PathVariable("char") char: String,
