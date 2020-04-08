@@ -10,7 +10,7 @@ class DerbyDataSource {
     @Bean
     fun dataSource(): DataSource {
         return DataSourceBuilder.create()
-                .driverClassName("org.hsqldb.jdbcDriver")
+                .driverClassName("org.hsqldb.jdbc.JDBCDriver")
                 .url("jdbc:hsqldb:file:./db/link")
                 .username("sa")
                 .build()
