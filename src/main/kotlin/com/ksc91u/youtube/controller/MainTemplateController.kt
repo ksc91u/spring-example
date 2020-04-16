@@ -73,9 +73,11 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
         val pic = pics[char.toInt() % 3]
 
         model.addAttribute("title", "$userId 在 Wave 抽到了 $name")
-        model.addAttribute("character", pic)
+        model.addAttribute("imgUrl", pic)
+        model.addAttribute("content", "快來 Wave 一起抽")
         model.addAttribute("userAgent", userAgentInfo)
-        model.addAttribute("fb", userAgentInfo.contains("facebook").not())
+        model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
+        model.addAttribute("routeUrl", "https://www.wave.com.tw")
 
         return "wave"
     }
