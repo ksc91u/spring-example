@@ -97,7 +97,7 @@ class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedPar
         model.addAttribute("content", "${shareObj.n1} 分享了 ${shareObj.n0} 的 直播")
         //https://i.ksc91u.info/unsafe/filters:watermark(https://live.staticflickr.com/6027/5946613249_0172090fce_b.jpg,50,50,10,20,20)/https%3A%2F%2Fi.imgur.com%2FWXoAhTa.png
 
-        model.addAttribute("imgUrl", "https://i.ksc91u.info/unsafe/filters:watermark(${URLEncoder.DEFAULT.encode(shareObj.i1, Charset.defaultCharset())},50,50,10,20,20)/${URLEncoder.DEFAULT.encode(shareObj.i0, Charset.defaultCharset())}")
+        model.addAttribute("imgUrl", "https://i.ksc91u.info/unsafe/filters:watermark(${URLEncoder.DEFAULT.encode(shareObj.i1, Charset.defaultCharset())},50,150,10,20,20)/${URLEncoder.DEFAULT.encode(shareObj.i0, Charset.defaultCharset())}")
         model.addAttribute("routeUrl", shareObj.l)
 
         model.addAttribute("userAgent", userAgentInfo)
