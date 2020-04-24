@@ -1,8 +1,10 @@
 package com.ksc91u.youtube.controller
 
 import com.google.gson.Gson
-import com.ksc91u.youtube.dao.UserDao
-import com.ksc91u.youtube.dao.UserDaoImpl
+import com.ksc91u.youtube.bean.api.WaveApiClient
+import com.ksc91u.youtube.dao.ShortLinkDao
+import com.ksc91u.youtube.dao.ShortLinkDaoImpl
+import com.ksc91u.youtube.dto.LiveDto
 import org.apache.catalina.util.URLEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -30,8 +32,40 @@ data class ShareObject(
 )
 
 @Controller
-class MainTemplateController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
-    private val dao: UserDao = UserDaoImpl(namedParameterJdbcTemplate)
+class MainTemplateController(
+        @Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate,
+        @Autowired val apiClient: WaveApiClient
+) {
+    private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
+
+    @RequestMapping(value = ["/live/{id}"], method = [RequestMethod.GET])
+    fun live(model: Model,
+             @PathVariable("id") liveId: String,
+             request: HttpServletRequest): String {
+        val result = apiClient.getLiveByLiveId(liveId).execute()
+        val live: LiveDto? = result.body()
+        val shareLinkDto = dao.getMapping("0")
+
+        val userAgentInfo = request.getHeader("User-Agent")
+
+        if (result.isSuccessful && live != null) {
+            model.addAttribute("title", live.title)
+            model.addAttribute("content", live.streamer.name + " " + live.streamer.description)
+            model.addAttribute("imgUrl", live.streamer.avatarUrl ?: "")
+            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
+            model.addAttribute("userAgent", "")
+            model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
+        } else {
+            model.addAttribute("title", shareLinkDto.title)
+            model.addAttribute("content", shareLinkDto.content)
+            model.addAttribute("imgUrl", shareLinkDto.imgUrl)
+            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
+            model.addAttribute("userAgent", "")
+            model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
+        }
+
+        return "wave"
+    }
 
     @RequestMapping(value = ["/list"], method = [RequestMethod.GET])
     fun listMappings(model: Model): String {

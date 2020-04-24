@@ -1,13 +1,11 @@
 package com.ksc91u.youtube.controller
 
-import com.ksc91u.youtube.dao.UserDao
-import com.ksc91u.youtube.dao.UserDaoImpl
+import com.ksc91u.youtube.dao.ShortLinkDao
+import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.Car
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.ModelAndView
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -15,7 +13,7 @@ import javax.servlet.http.HttpServletResponse
 
 @RestController
 class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
-    private val dao: UserDao = UserDaoImpl(namedParameterJdbcTemplate)
+    private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
 
     @RequestMapping("/")
     fun index(): String {

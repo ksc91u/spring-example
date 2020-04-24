@@ -13,7 +13,7 @@
         <table id="articlesDataTable" class="table table-responsive table-bordered">
             <thead>
             <th>id</th>
-            <th>hashKey</th>
+            <th>hashKey 複製貼到 FB, 第一次可能不會成功抓到縮圖</th>
             <th>routeUrl</th>
             <th>title</th>
             <th>content</th>
@@ -24,7 +24,7 @@
             <#list mappings as mapping>
                 <tr>
                     <td>${mapping.id}</td>
-                    <td>${mapping.hashKey}</td>
+                    <td><a href="../share/${mapping.hashKey}" target="_blank">${mapping.hashKey}</a></td>
                     <td>${mapping.routeUrl}</td>
                     <td>${mapping.title}</td>
                     <td>${mapping.content}</td>

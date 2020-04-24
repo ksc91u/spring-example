@@ -10,14 +10,14 @@ import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
 
-interface UserDao {
+interface ShortLinkDao {
     fun findAll(): MutableList<ShareLinkDto>
     fun addMapping(routeUrl: String, title: String, content: String, imgUrl: String): String
     fun getMapping(hashId: String): ShareLinkDto
 }
 
 @Repository
-class UserDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : UserDao {
+class ShortLinkDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : ShortLinkDao {
 
     private val random = SecureRandom()
 
