@@ -5,6 +5,7 @@ import com.ksc91u.youtube.bean.api.WaveApiClient
 import com.ksc91u.youtube.dao.ShortLinkDao
 import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.LiveDto
+import com.ksc91u.youtube.dto.UserDto
 import org.apache.catalina.util.URLEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -56,9 +57,16 @@ class MainTemplateController(
             model.addAttribute("userAgent", "")
             model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
         } else {
-            model.addAttribute("title", shareLinkDto.title)
-            model.addAttribute("content", shareLinkDto.content)
-            model.addAttribute("imgUrl", shareLinkDto.imgUrl)
+            val userDto: UserDto? = apiClient.getStreamerByLiveId(liveId).execute().body()
+            if(userDto == null) {
+                model.addAttribute("title", shareLinkDto.title)
+                model.addAttribute("content", shareLinkDto.content)
+                model.addAttribute("imgUrl", shareLinkDto.imgUrl)
+            }else{
+                model.addAttribute("title", "與你分享 ${userDto.name} 的好聲音")
+                model.addAttribute("content", userDto.description)
+                model.addAttribute("imgUrl", userDto.avatarUrl?:"")
+            }
             model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
             model.addAttribute("userAgent", "")
             model.addAttribute("notFb", userAgentInfo.contains("facebook").not())

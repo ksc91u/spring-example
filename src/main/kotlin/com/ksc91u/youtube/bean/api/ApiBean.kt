@@ -3,6 +3,7 @@ package com.ksc91u.youtube.bean.api
 import com.google.gson.GsonBuilder
 import com.ksc91u.youtube.Constant
 import com.ksc91u.youtube.dto.LiveDto
+import com.ksc91u.youtube.dto.UserDto
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,4 +38,7 @@ class ApiBean {
 interface WaveApiClient {
     @GET("${Constant.API_PREFIX}/lives/{liveId}")
     fun getLiveByLiveId(@Path("liveId") liveId: String): Call<LiveDto>
+
+    @GET("${Constant.API_PREFIX}/lives/{liveId}/streamer")
+    fun getStreamerByLiveId(@Path("liveId") liveId: String): Call<UserDto>
 }
