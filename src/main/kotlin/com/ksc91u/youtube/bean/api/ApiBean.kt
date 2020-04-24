@@ -41,4 +41,8 @@ interface WaveApiClient {
 
     @GET("${Constant.API_PREFIX}/lives/{liveId}/streamer")
     fun getStreamerByLiveId(@Path("liveId") liveId: String): Call<UserDto>
+
+    @GET("${Constant.API_PREFIX}/users/{userId}")
+    fun getUserById(@Path("userId") userId: String): Call<UserDto>
+
 }

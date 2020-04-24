@@ -6,6 +6,7 @@ import com.ksc91u.youtube.dao.ShortLinkDao
 import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.LiveDto
 import com.ksc91u.youtube.dto.UserDto
+import com.ksc91u.youtube.ext.toUUIDString
 import org.apache.catalina.util.URLEncoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -39,6 +40,54 @@ class MainTemplateController(
 ) {
     private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
 
+    @RequestMapping(value = ["/live/{live}/{user}"], method = [RequestMethod.GET])
+    fun userLive(model: Model,
+                 @PathVariable("live") liveId: String,
+                 @PathVariable("user") userId: String,
+                 request: HttpServletRequest): String {
+        val liveUuid: String = liveId.toUUIDString()
+        val userUuid: String = userId.toUUIDString()
+
+        val result = apiClient.getLiveByLiveId(liveUuid).execute()
+        val live: LiveDto? = result.body()
+
+        val userResult = apiClient.getUserById(userUuid).execute()
+        val user: UserDto? = userResult.body()
+
+        val shareLinkDto = dao.getMapping("0")
+
+        val userAgentInfo = request.getHeader("User-Agent")
+
+        if (result.isSuccessful && live != null) {
+
+            val imageUrl = "https://i.ksc91u.info/unsafe/filters:watermark(${user?.avatarUrl},50,50,10,20,20)/${live.streamer.avatarUrl}"
+
+            model.addAttribute("title", user?.name ?: "" + "分享了" + live.title)
+            model.addAttribute("content", live.streamer.name + " " + live.streamer.description)
+            model.addAttribute("imgUrl", imageUrl)
+            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
+            model.addAttribute("userAgent", "")
+            model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
+        } else {
+            val userDto: UserDto? = apiClient.getStreamerByLiveId(liveId).execute().body()
+            if (userDto == null) {
+                model.addAttribute("title", shareLinkDto.title)
+                model.addAttribute("content", shareLinkDto.content)
+                model.addAttribute("imgUrl", shareLinkDto.imgUrl)
+            } else {
+                model.addAttribute("title", "與你分享 ${userDto.name} 的好聲音")
+                model.addAttribute("content", userDto.description)
+                model.addAttribute("imgUrl", userDto.avatarUrl ?: "")
+            }
+            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
+            model.addAttribute("userAgent", "")
+            model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
+        }
+
+        return "wave"
+    }
+
+
     @RequestMapping(value = ["/live/{id}"], method = [RequestMethod.GET])
     fun live(model: Model,
              @PathVariable("id") liveId: String,
@@ -58,14 +107,14 @@ class MainTemplateController(
             model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
         } else {
             val userDto: UserDto? = apiClient.getStreamerByLiveId(liveId).execute().body()
-            if(userDto == null) {
+            if (userDto == null) {
                 model.addAttribute("title", shareLinkDto.title)
                 model.addAttribute("content", shareLinkDto.content)
                 model.addAttribute("imgUrl", shareLinkDto.imgUrl)
-            }else{
+            } else {
                 model.addAttribute("title", "與你分享 ${userDto.name} 的好聲音")
                 model.addAttribute("content", userDto.description)
-                model.addAttribute("imgUrl", userDto.avatarUrl?:"")
+                model.addAttribute("imgUrl", userDto.avatarUrl ?: "")
             }
             model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
             model.addAttribute("userAgent", "")
@@ -174,3 +223,4 @@ class MainTemplateController(
         return "wave"
     }
 }
+
