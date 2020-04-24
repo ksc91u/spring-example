@@ -60,7 +60,7 @@ class MainTemplateController(
 
         if (result.isSuccessful && live != null) {
 
-            val imageUrl = "https://i.ksc91u.info/unsafe/filters:watermark(${user?.avatarUrl},50,50,10,20,20)/${live.streamer.avatarUrl}"
+            val imageUrl = "https://i.ksc91u.info/unsafe/filters:watermark(${user?.avatarUrl},50,center,10,35,35)/${live.streamer.avatarUrl}"
 
             model.addAttribute("title", user?.name ?: "" + "分享了" + live.title)
             model.addAttribute("content", live.streamer.name + " " + live.streamer.description)
