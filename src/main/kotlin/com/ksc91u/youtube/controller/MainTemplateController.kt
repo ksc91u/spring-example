@@ -62,8 +62,9 @@ class MainTemplateController(
 
             val imageUrl = "https://i.ksc91u.info/unsafe/filters:watermark(${user?.avatarUrl},50,center,10,35,35)/${live.streamer.avatarUrl}"
 
-            model.addAttribute("title", user?.name ?: "" + "分享了" + live.title)
-            model.addAttribute("content", live.streamer.name + " " + live.streamer.description)
+            val nameNotNull = user?.name ?: "Wave 甜甜圈"
+            model.addAttribute("title", "$nameNotNull 分享了 ${live.title}")
+            model.addAttribute("content", "${live.streamer.name} 說 ${live.streamer.description}")
             model.addAttribute("imgUrl", imageUrl)
             model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
             model.addAttribute("userAgent", "")
