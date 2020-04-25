@@ -66,7 +66,7 @@ class MainTemplateController(
             model.addAttribute("title", "$nameNotNull 分享了 ${live.title}")
             model.addAttribute("content", "${live.streamer.name} 說 ${live.streamer.description}")
             model.addAttribute("imgUrl", imageUrl)
-            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
+            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveUuid}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
             model.addAttribute("userAgent", "")
             model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
         } else {
@@ -80,7 +80,7 @@ class MainTemplateController(
                 model.addAttribute("content", userDto.description)
                 model.addAttribute("imgUrl", userDto.avatarUrl ?: "")
             }
-            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveId}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
+            model.addAttribute("routeUrl", "https://wavelive.onelink.me/tEt5?pid=deeplink_live&c=deeplink_live&w_live=${liveUuid}&is_retargeting=true&af_dp=wavelive%3A%2F%2F")
             model.addAttribute("userAgent", "")
             model.addAttribute("notFb", userAgentInfo.contains("facebook").not())
         }
