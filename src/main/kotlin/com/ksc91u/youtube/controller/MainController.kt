@@ -3,6 +3,7 @@ package com.ksc91u.youtube.controller
 import com.ksc91u.youtube.dao.ShortLinkDao
 import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.Car
+import com.ksc91u.youtube.dto.ConfigDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.ui.Model
@@ -43,7 +44,7 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
     ): String {
         try {
             dao.setConfig(configKey, configValue)
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             return "Exception"
         }
@@ -56,12 +57,12 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
         model: Model,
         @PathVariable("configKey") configKey: String,
         request: HttpServletRequest
-    ): String {
+    ): ConfigDto {
         try {
-            return dao.getConfig(configKey)
+            return ConfigDto(dao.getConfig(configKey))
         } catch (e: Exception) {
             e.printStackTrace()
-            return "Exception"
+            return ConfigDto("")
         }
     }
 
