@@ -4,6 +4,7 @@ import com.ksc91u.youtube.dao.ShortLinkDao
 import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.Car
 import com.ksc91u.youtube.dto.ConfigDto
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.ui.Model
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
     private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
+    private val logger =  LoggerFactory.getLogger(MainRestController::class.java)
 
     @RequestMapping("/")
     fun index(): String {
@@ -43,6 +45,7 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
         request: HttpServletRequest
     ): String {
         try {
+            logger.info("Request setConfig ${request.remoteAddr}, key $configKey, value $configValue")
             dao.setConfig(configKey, configValue)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -59,6 +62,7 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
         request: HttpServletRequest
     ): ConfigDto {
         try {
+            logger.info("Request getConfig ${request.remoteAddr}, key $configKey")
             return ConfigDto(dao.getConfig(configKey))
         } catch (e: Exception) {
             e.printStackTrace()
