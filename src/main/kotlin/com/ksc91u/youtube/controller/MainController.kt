@@ -5,6 +5,7 @@ import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.Car
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
@@ -32,12 +33,36 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
         return "${car.type} car destroyed ${car.color}"
     }
 
-    @RequestMapping("/sign")
-    fun sign(response: HttpServletResponse,
-             @RequestParam("id", required = false, defaultValue = "") userId: String): Unit {
-        val cookie = Cookie("user", userId)
-        response.addCookie(cookie)
-        response.sendRedirect("https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=95bc56f2-1a3f-4b60-952c-0f6528a80a97&env=na3-eu1&acct=2cb555f3-2272-4cec-b6a3-2a761af0980f&v=2")
+    @RequestMapping(value = ["/config/{configKey}/{configValue}"], method = [RequestMethod.POST])
+    @ResponseBody
+    fun setConfig(
+        model: Model,
+        @PathVariable("configKey") configKey: String,
+        @PathVariable("configValue") configValue: String,
+        request: HttpServletRequest
+    ): String {
+        try {
+            dao.setConfig(configKey, configValue)
+        }catch (e: Exception) {
+            e.printStackTrace()
+            return "Exception"
+        }
+        return "OK"
+    }
+
+    @RequestMapping(value = ["/config/{configKey}"], method = [RequestMethod.GET])
+    @ResponseBody
+    fun getConfig(
+        model: Model,
+        @PathVariable("configKey") configKey: String,
+        request: HttpServletRequest
+    ): String {
+        try {
+            return dao.getConfig(configKey)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return "Exception"
+        }
     }
 
 
