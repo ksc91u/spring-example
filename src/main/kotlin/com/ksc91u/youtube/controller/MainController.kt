@@ -1,14 +1,18 @@
 package com.ksc91u.youtube.controller
 
+import com.ksc91u.youtube.dao.MemberDao
+import com.ksc91u.youtube.dao.MemberDaoImpl
 import com.ksc91u.youtube.dao.ShortLinkDao
 import com.ksc91u.youtube.dao.ShortLinkDaoImpl
 import com.ksc91u.youtube.dto.Car
 import com.ksc91u.youtube.dto.ConfigDto
+import com.ksc91u.youtube.dto.MemberLogDto
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.time.Instant
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -17,7 +21,8 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
     private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
-    private val logger =  LoggerFactory.getLogger(MainRestController::class.java)
+    private val memberDao: MemberDao = MemberDaoImpl(namedParameterJdbcTemplate)
+    private val logger = LoggerFactory.getLogger(MainRestController::class.java)
 
     @RequestMapping("/")
     fun index(): String {
@@ -81,5 +86,18 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
         response.addCookie(cookieReset)
 
         return "${cookie?.value ?: "empty"} user deny signing"
+    }
+
+    @RequestMapping("/member/test")
+    fun memberTest(request: HttpServletRequest, response: HttpServletResponse): String {
+        memberDao.addMemberLog(
+            MemberLogDto(
+                "memberId", "127.0.0.1",
+                "TW", "Mozilla", "Pixel 3", "Android 12", Instant.now(),
+                "device Id"
+            )
+        )
+        val dto = memberDao.getByMemberDeviceId("memberId", "devicee Id")
+        return "OK ${dto.toString()}"
     }
 }

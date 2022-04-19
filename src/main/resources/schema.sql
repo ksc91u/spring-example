@@ -32,3 +32,15 @@ CREATE TABLE UserMap (
     name VARCHAR(128) NOT NULL,
     CONSTRAINT primary_key PRIMARY KEY (userId)
 )
+
+--CREATE TABLE MemberLog (
+--    member_uuid VARCHAR(100) NOT NULL,
+--    ip_address VARCHAR(128) NOT NULL,
+--    ip_country VARCHAR(100) NOT NULL,
+--    user_agent VARCHAR(200),
+--    device VARCHAR(32),
+--    os VARCHAR(32) NOT NULL,
+--    last_time TIMESTAMP,
+--    member_device_id VARCHAR(36) NOT NULL,
+--    PRIMARY KEY (member_uuid, member_device_id)
+--)
