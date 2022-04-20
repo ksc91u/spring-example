@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import java.time.Instant
+import java.util.*
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -90,14 +91,16 @@ class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParamet
 
     @RequestMapping("/member/test")
     fun memberTest(request: HttpServletRequest, response: HttpServletResponse): String {
+        val uuid = UUID.randomUUID()
+        val deviceID = UUID.randomUUID()
         memberDao.addMemberLog(
             MemberLogDto(
-                "memberId", "127.0.0.1",
+                uuid.toString(), "127.0.0.1",
                 "TW", "Mozilla", "Pixel 3", "Android 12", Instant.now(),
-                "device Id"
+                deviceID.toString()
             )
         )
-        val dto = memberDao.getByMemberDeviceId("memberId", "devicee Id")
+        val dto = memberDao.getByMemberDeviceId(uuid.toString(), deviceID.toString())
         return "OK ${dto.toString()}"
     }
 }

@@ -18,8 +18,8 @@ interface MemberDao {
 class MemberDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : MemberDao {
     override fun addMemberLog(newRecord: MemberLogDto): MemberLogDto {
         val sql = """
-            INSERT INTO MemberLog(member_uuid, ip_address, ip_country, user_agent, device, os, device_id)
-            VALUES (:member_uuid, :ip_address, :ip_country, :user_agent, :device, :os, :device_id)
+            INSERT INTO MemberLog(member_uuid, ip_address, ip_country, user_agent, device, os, member_device_id)
+            VALUES (:member_uuid, :ip_address, :ip_country, :user_agent, :device, :os, :member_device_id)
         """.trimIndent()
         val params = mapOf(
             "member_uuid" to newRecord.memberId,
@@ -28,7 +28,7 @@ class MemberDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) 
             "user_agent" to newRecord.userAgent,
             "device" to newRecord.device,
             "os" to newRecord.os,
-            "device_id" to newRecord.deviceId
+            "member_device_id" to newRecord.deviceId
         )
 
         namedParameterJdbcTemplate.execute(sql, params) { ps -> ps.execute() }
@@ -41,9 +41,9 @@ class MemberDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) 
 
     override fun getByMemberDeviceId(memberId: String, deviceId: String): MemberLogDto? {
         val params: Map<String, Any> = mapOf(
-            "member_uuid" to memberId, "device_id" to deviceId
+            "member_uuid" to memberId, "member_device_id" to deviceId
         )
-        val sql = "SELECT * FROM MemberLog WHERE member_uuid = :member_uuid AND device_id = :device_id"
+        val sql = "SELECT * FROM MemberLog WHERE member_uuid = :member_uuid AND member_device_id = :member_device_id"
         return namedParameterJdbcTemplate.query(sql, params, MemberLogMapper()).firstOrNull()
     }
 
