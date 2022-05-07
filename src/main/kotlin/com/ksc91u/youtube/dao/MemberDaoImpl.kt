@@ -1,6 +1,7 @@
 package com.ksc91u.youtube.dao
 
 import com.ksc91u.youtube.dto.MemberLogDto
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -15,7 +16,7 @@ interface MemberDao {
 }
 
 @Repository
-class MemberDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : MemberDao {
+class MemberDaoImpl(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : MemberDao {
     override fun addMemberLog(newRecord: MemberLogDto): MemberLogDto {
         val sql = """
             INSERT INTO MemberLog(member_uuid, ip_address, ip_country, user_agent, device, os, member_device_id)

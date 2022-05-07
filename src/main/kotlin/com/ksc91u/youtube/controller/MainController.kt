@@ -20,9 +20,10 @@ import javax.servlet.http.HttpServletResponse
 
 
 @RestController
-class MainRestController(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
-    private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
-    private val memberDao: MemberDao = MemberDaoImpl(namedParameterJdbcTemplate)
+abstract class MainRestController(
+    @Autowired private val dao: ShortLinkDao,
+    @Autowired private val memberDao: MemberDao
+) {
     private val logger = LoggerFactory.getLogger(MainRestController::class.java)
 
     @RequestMapping("/")

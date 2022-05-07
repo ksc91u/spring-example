@@ -68,6 +68,9 @@ dependencies {
 	implementation("com.squareup.retrofit2:converter-gson:2.6.2")
 	implementation("com.squareup.okhttp3:okhttp:3.14.2")
 
+	implementation("com.google.firebase:firebase-admin:8.1.0")
+
+
 	runtimeOnly("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

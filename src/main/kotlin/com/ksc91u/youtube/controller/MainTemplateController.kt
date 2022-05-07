@@ -36,10 +36,9 @@ data class ShareObject(
 @Controller
 class MainTemplateController(
         @Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate,
-        @Autowired val apiClient: WaveApiClient
+        @Autowired val apiClient: WaveApiClient,
+        @Autowired val dao: ShortLinkDao
 ) {
-    private val dao: ShortLinkDao = ShortLinkDaoImpl(namedParameterJdbcTemplate)
-
     @RequestMapping(value = ["/live/{live}/{user}"], method = [RequestMethod.GET])
     fun userLive(model: Model,
                  @PathVariable("live") liveId: String,

@@ -2,6 +2,7 @@ package com.ksc91u.youtube.dao
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.ksc91u.youtube.dto.ShareLinkDto
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -20,7 +21,7 @@ interface ShortLinkDao {
 }
 
 @Repository
-class ShortLinkDaoImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : ShortLinkDao {
+class ShortLinkDaoImpl(@Autowired val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : ShortLinkDao {
 
     private val random = SecureRandom()
 
